@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Potty Time">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#d7ebe6">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Ashlee's Potty Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=Karla:wght@400;600;700&display=swap">
+<style>
+/* Layout: one narrow spa-brochure column floating on bathroom tile; the breathing circle is the hero. */
+:root {
+  --tile: #d7ebe6;
+  --grout: #c3dcd6;
+  --porcelain: #fbfdfc;
+  --ink: #23403b;
+  --muted: #5d7a74;
+  --accent: #2f8f80;
+  --blush: #f3c9c0;
+  --line: #dbe8e5;
+  --display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --body: "Karla", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --tile: #13282a; --grout: #1a3335; --porcelain: #1d3234; --ink: #e5f2ef;
+    --muted: #94b3ad; --accent: #6fd0bf; --blush: #8a5a55; --line: #2c4648; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --tile: #13282a; --grout: #1a3335; --porcelain: #1d3234; --ink: #e5f2ef;
+  --muted: #94b3ad; --accent: #6fd0bf; --blush: #8a5a55; --line: #2c4648; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background-color: var(--tile);
+  background-image:
+    linear-gradient(var(--grout) 2px, transparent 2px),
+    linear-gradient(90deg, var(--grout) 2px, transparent 2px);
+  background-size: 56px 56px;
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.5;
+  padding: 24px 16px 48px;
+  min-height: 100%;
+}
+.wrap { max-width: 520px; margin: 0 auto; display: grid; gap: 18px; }
+.card {
+  background: var(--porcelain);
+  border-radius: 28px;
+  padding: 28px 24px;
+  box-shadow: 0 1px 0 var(--line), 0 12px 32px -18px rgba(20, 60, 55, .35);
+}
+header { text-align: center; display: grid; gap: 6px; }
+.eyebrow { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(48px, 13vw, 68px); line-height: 1; margin: 0; letter-spacing: -.01em; }
+h1 .who { display: block; font-size: .45em; font-style: italic; font-weight: 500; color: var(--muted); margin-bottom: 4px; }
+h1 em { font-weight: 500; color: var(--accent); }
+.tag { font-family: var(--display); font-style: italic; font-size: 20px; color: var(--muted); margin: 0; }
+h2 { font-family: var(--display); font-size: 26px; margin: 0; font-weight: 700; text-wrap: balance; }
+.label { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+
+.intent { display: grid; gap: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  font: 600 14px var(--body); color: var(--ink);
+  background: transparent; border: 1.5px solid var(--line);
+  border-radius: 999px; padding: 7px 14px; cursor: pointer;
+}
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--porcelain); }
+
+.sanctuary { display: grid; justify-items: center; gap: 18px; text-align: center; }
+.orb {
+  width: min(240px, 70vw); aspect-ratio: 1; max-width: 100%;
+  border-radius: 50%; display: grid; place-items: center; position: relative;
+  background: radial-gradient(circle at 50% 40%, var(--porcelain), var(--tile));
+  border: 2px solid var(--line);
+}
+.orb::before {
+  content: ""; position: absolute; inset: 14%; border-radius: 50%;
+  background: var(--blush); opacity: .45; transform: scale(.75);
+}
+.running .orb::before { animation: breathe 10s ease-in-out infinite; }
+@keyframes breathe { 0%,100% { transform: scale(.7); opacity: .35; } 50% { transform: scale(1.12); opacity: .6; } }
+.orb-inner { position: relative; display: grid; gap: 2px; }
+.clock { font-family: var(--display); font-size: 54px; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }
+.breath { font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); font-weight: 700; min-height: 1.5em; }
+
+.btn {
+  font: 700 17px var(--body); border: 0; cursor: pointer; border-radius: 999px;
+  padding: 14px 30px; background: var(--accent); color: var(--porcelain);
+}
+.btn.ghost { background: transparent; color: var(--accent); border: 1.5px solid var(--accent); padding: 10px 20px; font-size: 15px; }
+.btn:focus-visible, .chip:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+
+.thought { display: grid; gap: 8px; }
+.thought blockquote {
+  margin: 0; font-family: var(--display); font-style: italic; font-size: 25px; line-height: 1.25; text-wrap: balance;
+}
+.thought .row { justify-content: flex-start; }
+
+.done { display: grid; gap: 14px; text-align: center; border: 2px dashed var(--accent); }
+.rank { font-family: var(--display); font-size: 34px; font-weight: 700; color: var(--accent); line-height: 1.1; }
+.share {
+  text-align: left; white-space: pre-wrap; font-size: 14px; background: var(--tile);
+  border-radius: 16px; padding: 14px; margin: 0; font-family: var(--body); user-select: all;
+}
+.rate { display: grid; gap: 10px; }
+.feet { display: flex; justify-content: center; gap: 6px; flex-wrap: wrap; }
+.foot { font-size: 28px; line-height: 1; background: transparent; border: 1.5px solid var(--line); border-radius: 14px; padding: 8px 10px; cursor: pointer; filter: grayscale(1); opacity: .5; }
+.foot.on { filter: none; opacity: 1; border-color: var(--accent); background: var(--tile); }
+.foot:focus-visible { outline: 3px solid var(--blush); outline-offset: 2px; }
+.verdict { font-family: var(--display); font-style: italic; font-size: 21px; min-height: 1.3em; }
+.photo { display: grid; gap: 10px; justify-items: center; }
+.photo input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.photo label.btn { display: inline-block; }
+.photo input:focus-visible + label { outline: 3px solid var(--blush); outline-offset: 3px; }
+.cardImg { width: 100%; max-width: 100%; border-radius: 18px; box-shadow: 0 10px 28px -16px rgba(20, 60, 55, .5); -webkit-touch-callout: default; }
+.hint { font-size: 14px; color: var(--muted); }
+.toast { font-size: 14px; color: var(--accent); font-weight: 700; min-height: 1.5em; }
+
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: center; }
+.stat b { display: block; font-family: var(--display); font-size: 34px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; color: var(--muted); }
+.log { list-style: none; padding: 0; margin: 14px 0 0; display: grid; }
+.log li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); font-size: 14px; }
+.log li span:last-child { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.empty { color: var(--muted); font-size: 14px; margin: 12px 0 0; }
+footer { text-align: center; font-size: 13px; color: var(--muted); }
+
+@media (prefers-reduced-motion: reduce) { .running .orb::before { animation: none; transform: scale(1); } }
+</style>
+<style>
+/* Standalone app: keep content clear of the notch and home bar */
+html { height: 100%; }
+body { margin: 0; padding-top: calc(24px + env(safe-area-inset-top, 0px)); padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px)); -webkit-tap-highlight-color: transparent; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="card">
+    <div class="eyebrow">Do not disturb · Wellness in progress</div>
+    <h1><span class="who">Ashlee's</span> Potty <em>Time</em></h1>
+    <p class="tag">Ashlee's daily sit-down with herself.</p>
+  </header>
+
+  <section class="card intent" aria-labelledby="intent-h">
+    <div class="label" id="intent-h">Today's intention</div>
+    <div class="chips" id="chips"></div>
+  </section>
+
+  <section class="card sanctuary" id="sanctuary">
+    <div class="orb" aria-live="polite">
+      <div class="orb-inner">
+        <div class="clock" id="clock">0:00</div>
+        <div class="breath" id="breath">Lock the door</div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" id="startBtn">Begin Potty Time</button>
+      <button class="btn ghost" id="soundBtn" aria-pressed="false">Play babbling brook</button>
+    </div>
+  </section>
+
+  <section class="card done" id="done" hidden>
+    <div class="label">Session complete</div>
+    <div class="rank" id="rank"></div>
+    <div class="rate">
+      <div class="label" id="rate-h">Rate the Poo and Send the View</div>
+      <div class="feet" id="feet" role="group" aria-labelledby="rate-h"></div>
+      <div class="verdict" id="verdict">Tap a poo to rate the view.</div>
+    </div>
+    <div class="photo">
+      <input type="file" id="photoIn" accept="image/*">
+      <label class="btn ghost" for="photoIn" id="photoLabel">Add today's potty pic</label>
+      <img class="cardImg" id="cardImg" alt="Ashlee's Potty Time report card with today's view" hidden>
+      <div class="hint" id="cardHint" hidden>Press and hold the picture to save it, then send it to the group.</div>
+      <button class="btn" id="copyPicBtn" hidden>Copy picture</button>
+    </div>
+    <pre class="share" id="share"></pre>
+    <div class="row">
+      <button class="btn" id="copyBtn">Copy text for the group chat</button>
+      <button class="btn ghost" id="closeBtn">Done</button>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </section>
+
+  <section class="card thought" aria-labelledby="thought-h">
+    <div class="label" id="thought-h">Throne thought</div>
+    <blockquote id="thought"></blockquote>
+    <div class="row"><button class="btn ghost" id="nextThought">Another thought</button></div>
+  </section>
+
+  <section class="card" aria-labelledby="log-h">
+    <h2 id="log-h">Peace log</h2>
+    <div class="stats" style="margin-top:14px">
+      <div class="stat"><b id="sCount">0</b><span>sessions</span></div>
+      <div class="stat"><b id="sTotal">0</b><span>minutes of peace</span></div>
+      <div class="stat"><b id="sLong">0:00</b><span>longest sit</span></div>
+      <div class="stat"><b id="sView">–</b><span>avg view rating</span></div>
+    </div>
+    <ul class="log" id="log"></ul>
+    <p class="empty" id="empty">No sessions yet. Tap Begin Potty Time, and your first sit shows up here.</p>
+  </section>
+
+</div>
+
+<script>
+const INTENTIONS = ["Reflect", "Hide from everyone", "Scroll in silence", "Plan my comeback", "Just sit", "Avoid the dishes"];
+const THOUGHTS = [
+  "The door is locked. The world can wait.",
+  "You are not hiding. You are recharging.",
+  "Notice your feet. They carried you here. Thank them.",
+  "Somebody is knocking. That is their journey, not yours.",
+  "The group chat will survive without you for six minutes.",
+  "Your legs are falling asleep. This is called surrender.",
+  "Be like the water in the tank: calm, refilling, ready.",
+  "Today's affirmation: I deserve a door that locks.",
+  "Feet on the bath mat. Mind in the present.",
+  "Every flush is a fresh start.",
+  "The shampoo bottles are watching. They do not judge.",
+  "Over, not under. Some truths are simply true.",
+  "If nobody can find you, did you even have responsibilities?",
+  "This is the only room in the house with a waiting list.",
+  "Inhale peace. Exhale... let's just stay with peace.",
+  "Great thinkers did their best work sitting down. Probably here.",
+  "You are the main character of this tiny room.",
+  "Check the roll before you commit. That is wisdom.",
+  "Let your worries go the way of all things in this room.",
+  "Five more minutes. Nobody needs to know."
+];
+const RANKS = [
+  [0, "Express Lane"],
+  [120, "Casual Contemplator"],
+  [300, "Porcelain Philosopher"],
+  [600, "Throne Scholar"],
+  [1200, "Legs-Gone-Numb Laureate"]
+];
+const VIEWS = [
+  "Just tile. A humble view.",
+  "Bath mat is doing its best.",
+  "Solid angle. Toes are present.",
+  "The lighting? Chef's kiss.",
+  "Gallery-worthy. Frame it."
+];
+const BREATHS = ["Breathe in", "Hold", "Breathe out", "Let it go"];
+
+const $ = id => document.getElementById(id);
+let intention = INTENTIONS[0];
+let start = 0, timer = null, thought = "";
+let log = [];
+try { log = JSON.parse(localStorage.getItem("pottyLog") || "[]"); } catch (e) { log = []; }
+
+const fmt = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+const rankFor = s => RANKS.filter(r => s >= r[0]).pop()[1];
+
+function renderChips() {
+  $("chips").innerHTML = "";
+  INTENTIONS.forEach(name => {
+    const b = document.createElement("button");
+    b.className = "chip"; b.textContent = name;
+    b.setAttribute("aria-pressed", name === intention);
+    b.onclick = () => { intention = name; renderChips(); };
+    $("chips").appendChild(b);
+  });
+}
+
+function newThought() {
+  let t;
+  do { t = THOUGHTS[Math.floor(Math.random() * THOUGHTS.length)]; } while (t === thought);
+  thought = t; $("thought").textContent = t;
+}
+
+function tick() {
+  const s = (Date.now() - start) / 1000;
+  $("clock").textContent = fmt(s);
+  $("breath").textContent = BREATHS[Math.floor(s / 2.5) % 4];
+  if (Math.floor(s) > 0 && Math.floor(s) % 45 === 0 && Math.floor(s) !== tick.last) { tick.last = Math.floor(s); newThought(); }
+}
+
+$("startBtn").onclick = () => {
+  if (!timer) {
+    start = Date.now(); tick(); timer = setInterval(tick, 250);
+    $("sanctuary").classList.add("running");
+    $("startBtn").textContent = "End session";
+    $("done").hidden = true;
+  } else {
+    const secs = Math.round((Date.now() - start) / 1000);
+    clearInterval(timer); timer = null;
+    $("sanctuary").classList.remove("running");
+    $("startBtn").textContent = "Begin Potty Time";
+    $("breath").textContent = "Wash your hands";
+    chime();
+    finish(secs);
+  }
+};
+
+function finish(secs) {
+  const rank = rankFor(secs);
+  log.unshift({ when: Date.now(), secs, intention, rank });
+  log = log.slice(0, 50);
+  try { localStorage.setItem("pottyLog", JSON.stringify(log)); } catch (e) {}
+  $("rank").textContent = rank;
+  last = { secs, rank, view: 0 };
+  photo = null; $("cardImg").hidden = true; $("cardHint").hidden = true; $("copyPicBtn").hidden = true;
+  $("photoLabel").textContent = "Add today's potty pic"; $("photoIn").value = "";
+  renderFeet(); writeShare();
+  $("toast").textContent = "";
+  $("done").hidden = false;
+  $("done").scrollIntoView({ behavior: "smooth", block: "center" });
+  renderLog();
+}
+
+let last = null;
+function renderFeet() {
+  $("feet").innerHTML = "";
+  for (let i = 1; i <= 5; i++) {
+    const b = document.createElement("button");
+    b.className = "foot" + (i <= last.view ? " on" : "");
+    b.textContent = "💩";
+    b.setAttribute("aria-label", i + " out of 5: " + VIEWS[i - 1]);
+    b.setAttribute("aria-pressed", i === last.view);
+    b.onclick = () => {
+      last.view = i; log[0].view = i;
+      try { localStorage.setItem("pottyLog", JSON.stringify(log)); } catch (e) {}
+      renderFeet(); writeShare(); renderLog();
+    };
+    $("feet").appendChild(b);
+  }
+  $("verdict").textContent = last.view ? VIEWS[last.view - 1] : "Tap a poo to rate the view.";
+}
+
+function writeShare() {
+  const { secs, rank, view } = last;
+  $("share").textContent =
+    "🧘 ASHLEE'S POTTY TIME REPORT\n" +
+    "Duration: " + fmt(secs) + " of peaceful reflection\n" +
+    "Intention: " + intention + "\n" +
+    "Rank: " + rank + "\n" +
+    (view ? "Today's view: " + "💩".repeat(view) + " " + VIEWS[view - 1] + "\n" : "") +
+    "Today's thought: \"" + thought + "\"\n" +
+    "Please hold all questions until I return. 🚽";
+  drawCard();
+}
+
+/* Report card: her photo on top, the session stats on a porcelain panel underneath */
+let photo = null;
+$("photoIn").onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const img = new Image();
+  img.onload = () => { photo = img; $("photoLabel").textContent = "Change photo"; drawCard(); };
+  img.onerror = () => { $("toast").textContent = "That photo wouldn't open. Try a JPG or PNG."; };
+  img.src = URL.createObjectURL(file);
+};
+
+function wrapLines(ctx, text, maxW) {
+  const lines = [];
+  let line = "";
+  text.split(" ").forEach(w => {
+    const test = line ? line + " " + w : w;
+    if (ctx.measureText(test).width > maxW && line) { lines.push(line); line = w; } else line = test;
+  });
+  if (line) lines.push(line);
+  return lines;
+}
+
+const cardCanvas = document.createElement("canvas");
+async function drawCard() {
+  if (!photo || !last) return;
+  try { await document.fonts.ready; } catch (e) {}
+  const W = 1080, PH = 1000, PAD = 72;
+  const c = cardCanvas, ctx = c.getContext("2d");
+  const serif = '"Cormorant Garamond", Georgia, serif', sans = 'Karla, "Segoe UI", sans-serif';
+  const FOOT = "💩";
+
+  // Measure the thought first so the card grows to fit it
+  ctx.font = "italic 500 50px " + serif;
+  const tLines = wrapLines(ctx, "“" + thought + "”", W - PAD * 2);
+  const H = PH + 330 + tLines.length * 60 + (last.view ? 76 : 0);
+  c.width = W; c.height = H;
+
+  // Photo, cropped to fill
+  const sc = Math.max(W / photo.width, PH / photo.height);
+  const dw = photo.width * sc, dh = photo.height * sc;
+  ctx.drawImage(photo, (W - dw) / 2, (PH - dh) / 2, dw, dh);
+
+  // Do-not-disturb tag on the photo
+  ctx.font = "700 30px " + sans;
+  const tag = "DO NOT DISTURB";
+  const tw = ctx.measureText(tag).width + 56;
+  ctx.fillStyle = "rgba(251,253,252,.92)";
+  ctx.beginPath();
+  if (ctx.roundRect) ctx.roundRect(40, 40, tw, 64, 32); else ctx.rect(40, 40, tw, 64);
+  ctx.fill();
+  ctx.fillStyle = "#2f8f80"; ctx.fillText(tag, 68, 83);
+
+  // Porcelain panel
+  ctx.fillStyle = "#fbfdfc"; ctx.fillRect(0, PH, W, H - PH);
+  ctx.fillStyle = "#d7ebe6"; ctx.fillRect(0, PH, W, 10);
+
+  let y = PH + 90;
+  ctx.fillStyle = "#5d7a74"; ctx.font = "700 30px " + sans;
+  ctx.fillText("ASHLEE'S POTTY TIME", PAD, y);
+  y += 100;
+  ctx.fillStyle = "#2f8f80"; ctx.font = "700 84px " + serif; ctx.fillText(last.rank, PAD, y);
+  y += 80;
+  ctx.fillStyle = "#23403b"; ctx.font = "600 38px " + sans;
+  ctx.fillText(fmt(last.secs) + " of peace  ·  " + intention, PAD, y);
+  if (last.view) {
+    y += 76;
+    ctx.font = "44px sans-serif";
+    const feet = FOOT.repeat(last.view);
+    ctx.fillText(feet, PAD, y);
+    const fw = ctx.measureText(feet).width;
+    ctx.font = "600 34px " + sans; ctx.fillStyle = "#5d7a74"; ctx.fillText(VIEWS[last.view - 1], PAD + fw + 20, y - 4);
+  }
+  y += 90;
+  ctx.fillStyle = "#23403b"; ctx.font = "italic 500 50px " + serif;
+  tLines.forEach(l => { ctx.fillText(l, PAD, y); y += 60; });
+
+  $("cardImg").src = c.toDataURL("image/jpeg", 0.9);
+  $("cardImg").hidden = false; $("cardHint").hidden = false; $("copyPicBtn").hidden = false;
+}
+
+$("copyPicBtn").onclick = () => {
+  const failed = () => { $("toast").textContent = "Copying pictures doesn't work here. Press and hold the picture to save it instead."; };
+  try {
+    const blob = new Promise(res => cardCanvas.toBlob(res, "image/png"));
+    navigator.clipboard.write([new ClipboardItem({ "image/png": blob })])
+      .then(() => { $("toast").textContent = "Picture copied. Paste it in the group chat."; }, failed);
+  } catch (e) { failed(); }
+};
+
+$("copyBtn").onclick = () => {
+  const text = $("share").textContent;
+  const fallback = () => {
+    const r = document.createRange(); r.selectNodeContents($("share"));
+    const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+    $("toast").textContent = "Text selected. Copy it and send it to the crew.";
+  };
+  try {
+    navigator.clipboard.writeText(text).then(() => { $("toast").textContent = "Copied. Go tell the group."; }, fallback);
+  } catch (e) { fallback(); }
+};
+$("closeBtn").onclick = () => { $("done").hidden = true; $("clock").textContent = "0:00"; $("breath").textContent = "Lock the door"; };
+$("nextThought").onclick = () => { newThought(); if (last && !$("done").hidden) writeShare(); };
+
+function renderLog() {
+  $("sCount").textContent = log.length;
+  $("sTotal").textContent = Math.round(log.reduce((a, x) => a + x.secs, 0) / 60);
+  $("sLong").textContent = fmt(log.reduce((a, x) => Math.max(a, x.secs), 0));
+  const rated = log.filter(x => x.view);
+  $("sView").textContent = rated.length ? (rated.reduce((a, x) => a + x.view, 0) / rated.length).toFixed(1) + " / 5" : "–";
+  $("empty").hidden = log.length > 0;
+  $("log").innerHTML = "";
+  log.slice(0, 10).forEach(x => {
+    const li = document.createElement("li");
+    const d = new Date(x.when);
+    const a = document.createElement("span"); a.textContent = x.rank + " · " + x.intention + (x.view ? " · " + "💩".repeat(x.view) : "");
+    const b = document.createElement("span");
+    b.textContent = fmt(x.secs) + " · " + d.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " + d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    li.append(a, b); $("log").appendChild(li);
+  });
+}
+
+/* Sound: filtered noise that sounds like running water, plus an end-of-session chime */
+let ctx = null, brook = null;
+function audio() { if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)(); return ctx; }
+$("soundBtn").onclick = () => {
+  try {
+    const c = audio();
+    if (brook) { brook.stop(); brook = null; $("soundBtn").textContent = "Play babbling brook"; $("soundBtn").setAttribute("aria-pressed", "false"); return; }
+    const len = c.sampleRate * 4, buf = c.createBuffer(1, len, c.sampleRate), d = buf.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) { last = (last + 0.02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; }
+    brook = c.createBufferSource(); brook.buffer = buf; brook.loop = true;
+    const f = c.createBiquadFilter(); f.type = "bandpass"; f.frequency.value = 700; f.Q.value = 0.6;
+    const g = c.createGain(); g.gain.value = 0.5;
+    brook.connect(f).connect(g).connect(c.destination); brook.start();
+    $("soundBtn").textContent = "Stop the brook"; $("soundBtn").setAttribute("aria-pressed", "true");
+  } catch (e) {}
+};
+function chime() {
+  try {
+    const c = audio();
+    [523.25, 659.25, 783.99].forEach((hz, i) => {
+      const o = c.createOscillator(), g = c.createGain(), t = c.currentTime + i * 0.18;
+      o.frequency.value = hz; o.type = "sine";
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(0.18, t + 0.02); g.gain.exponentialRampToValueAtTime(0.001, t + 1.6);
+      o.connect(g).connect(c.destination); o.start(t); o.stop(t + 1.7);
+    });
+  } catch (e) {}
+}
+
+renderChips(); newThought(); renderLog();
+</script>
+
+</body>
+</html>
